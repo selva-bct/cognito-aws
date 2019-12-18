@@ -1,0 +1,9 @@
+{
+    "cognito": {
+        "userPoolId": "us-east-2_sSgOsGlGg",
+        "appClientId": "5cccgvh50bkfsl7u0k7l4cogb3",
+        "poolRegion": "us-east-2",
+        "accessKeyId": "AKIAT63XT7FYZRRXLQTG",
+        "secretAccessKey": "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"
+    }
+}
