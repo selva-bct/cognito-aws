@@ -18,50 +18,13 @@ request({
 })
 
 async function validateToken(req, res, next) {
-    const token = req.headers['authorization'];
-    const pems = {}
-    const keys = jwks['keys']
-    for (let i = 0; i < keys.length; i++) {
-        const key_id = keys[i].kid
-        const modulus = keys[i].n
-        const exponent = keys[i].e
-        const key_type = keys[i].kty
-        const jwk = { kty: key_type, n: modulus, e: exponent }
-        const pem = jwkToPem(jwk)
-        pems[key_id] = pem
-    }
-    var decodedJwt = jwt.decode(token, { complete: true })
-    if (!decodedJwt) {
-        console.log("Not a valid JWT token")
-        res.status(401);
+    const token = req.headers['authorization']
+    try {
+        await getUser(token)
+        return res.json('Valid token')
+    } catch (error) {
         return res.send("Invalid token")
     }
-    var kid = decodedJwt.header.kid
-    console.log("decodedJwt :: ", decodedJwt)
-    var pem = pems[kid]
-    if (!pem) {
-        console.log('Invalid token')
-        res.status(401)
-        return res.send("Invalid token")
-    }
-    // need to check the expiry of the token
-    const { payload: { exp } } = decodedJwt
-    if (new Date(exp) < new Date()) {
-        res.status(401)
-        return res.send("Expired token")
-    }
-    jwt.verify(token, pem, function (err, payload) {
-        if (err) {
-            console.log("Invalid Token.");
-            res.status(401);
-            return res.send("Invalid tokern");
-        } else {
-            console.log("Valid Token.");
-            res.json({
-                message: 'Valid token'
-            })
-        }
-    });
 }
 
 
@@ -123,6 +86,16 @@ const adminCreateUser = (poolData) => {
     })
 }
 
+const getUser = (token) => {
+    return new Promise((resolve, reject) => {
+        cognitoClient.getUser({ AccessToken: token }, (err, userResponse) => {
+            if(err) {
+                return reject(err)
+            }
+            resolve(userResponse)
+        })
+    })
+}
 const adminConfirmSignup = async (req, res) => {
     try {
         const { username } = req.body

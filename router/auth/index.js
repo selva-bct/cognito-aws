@@ -8,6 +8,6 @@ authRouter
     .post('/changePassword', authService.changePassword)
     .get('/validateToken', authService.validateToken)
     .post('/firstTimeChangePassword', authService.firstTimeChangePassword)
-    .post('/confirmUser', authService.confirmUser)
+    // .post('/confirmUser', authService.adminConfirmSignup)
 
  module.exports = authRouter
