@@ -31,15 +31,19 @@ phases:
       # - command
   build:
     commands:
+      - echo Installing yarn ..
       - npm i -g yarn
+      - echo "Yarn Installing completed.."
+      - echo "Yarn Installing node dependencies.."
       - yarn
-      - yarn start 
-      - --exit
-      # - command
-  #post_build:
-    #commands:
-      # - command
-      # - command
+      - echo "node dependencies are completed.."
+      - yarn start && --exit
+      - echo "build - Successfull... :)"
+      - command
+  post_build:
+    commands:
+        - echo "Post build - Successfull... :)" && --exit
+        - command
   #reports:
     #enter-report-name-here:
       #files:
@@ -48,9 +52,9 @@ phases:
       #base-directory: location
       #discard-paths: yes
       #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
+artifacts:
+  files:
+    - node_modules
     # - location
   #name: $(date +%Y-%m-%d)
   #discard-paths: yes
