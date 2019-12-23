@@ -37,13 +37,12 @@ phases:
       - echo "Yarn Installing node dependencies.."
       - yarn
       - echo "node dependencies are completed.."
-      - ifconfig
       - yarn start
       - echo "build - Successfull... :)"
       - command
   post_build:
     commands:
-        - echo "Post build - Successfull... :)" && --exit
+        - echo "Post build - Successfull... :)"
         - command
   #reports:
     #enter-report-name-here:
